@@ -171,6 +171,7 @@ type Column interface {
 	Attrs() map[string]interface{}
 	SetLabel(label string) Column
 	SetAttrs(attrs map[string]interface{}) Column
+	Clone() Column
 	UnderlyingType() reflect.Type
 	IsVisible() bool
 	IsComputed() bool
@@ -209,6 +210,19 @@ func (c *column) Attrs() map[string]interface{} {
 func (c *column) SetLabel(label string) Column {
 	c.label = label
 	return c
+}
+
+func (c *column) Clone() Column {
+	return &column{
+		name:     c.name,
+		typ:      c.typ,
+		hidden:   c.hidden,
+		label:    c.label,
+		attrs:    c.attrs,
+		formulae: c.formulae,
+		expr:     c.expr,
+		serie:    c.serie,
+	}
 }
 
 func (c *column) SetAttrs(attrs map[string]interface{}) Column {

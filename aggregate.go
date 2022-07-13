@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
-
 	"github.com/cespare/xxhash"
 	"github.com/datasweet/datatable/serie"
 	"github.com/pkg/errors"
@@ -169,7 +168,15 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 		if len(typ) == 0 {
 			typ = Raw
 		}
-		if err := out.AddColumn(by.Name, typ); err != nil {
+
+		col := g.dt.Column(by.Name).Clone()
+
+		if err := out.AddColumn(col.Name(), col.Type(), func(opts *ColumnOptions) {
+			opts.Label = col.Label()
+		}); err != nil {
+			//if err := out.addColumn(col.(*column)); err != nil {
+			//}
+			//if err := out.AddColumn(by.Name, typ); err != nil {
 			err = errors.Wrapf(err, "can't add column '%s'", by.Name)
 			return nil, errors.Wrap(err, ErrCantAddColumn.Error())
 		}
@@ -177,7 +184,8 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 	for _, agg := range aggs {
 		name := agg.As
 		if len(name) == 0 {
-			name = fmt.Sprintf("%s %s", agg.Type, agg.Field)
+			//name = fmt.Sprintf("%s %s", agg.Type, agg.Field)
+			name = fmt.Sprintf("%s_%s", agg.Type, agg.Field)
 		}
 		typ := Float64
 		switch agg.Type {
@@ -185,7 +193,17 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 			typ = Int64
 		default:
 		}
-		if err := out.AddColumn(name, typ); err != nil {
+		col := g.dt.Column(agg.Field).Clone()
+		col.(*column).name = name
+		col.(*column).label = fmt.Sprintf("%s_%s", agg.Type, col.Label())
+		col.(*column).typ = typ
+		if err := out.AddColumn(col.Name(), col.Type(), func(opts *ColumnOptions) {
+			opts.Label = col.Label()
+		}); err != nil {
+			//}
+			//if err := out.addColumn(col.(*column)); err != nil {
+			//	}
+			//if err := out.AddColumn(name, typ); err != nil {
 			err = errors.Wrapf(err, "can't add column '%s'", name)
 			return nil, errors.Wrap(err, ErrCantAddColumn.Error())
 		}

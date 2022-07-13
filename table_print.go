@@ -122,7 +122,7 @@ func (this *DataTable) Preview(opt ...PrintOption) {
 
 	for _, header := range headers {
 		tb.Align(header, cell.AlignCenter)
-		tb.SetColumnColor(header, gotable.Underline, gotable.Write, gotable.NoneBackground)
+		tb.SetColumnColor(header, gotable.Highlight, gotable.Write, gotable.NoneBackground)
 	}
 
 	numRows := options.MaxRows
