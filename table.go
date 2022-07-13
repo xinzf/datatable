@@ -39,6 +39,16 @@ func (t *DataTable) NumCols() int {
 	return len(t.Columns())
 }
 
+func (t *DataTable) Cols() []Column {
+	var cols []Column
+	for _, col := range t.cols {
+		if col.IsVisible() {
+			cols = append(cols, col)
+		}
+	}
+	return cols
+}
+
 // Columns returns the visible column names in datatable
 func (t *DataTable) Columns() []string {
 	var cols []string

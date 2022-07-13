@@ -37,10 +37,24 @@ type ColumnOptions struct {
 	Expr        string
 	Values      []interface{}
 	TimeFormats []string
+	Label       string
+	Attrs       map[string]interface{}
 }
 
 // ColumnOption sets column options
 type ColumnOption func(opts *ColumnOptions)
+
+func ColumnLabel(label string) ColumnOption {
+	return func(opts *ColumnOptions) {
+		opts.Label = label
+	}
+}
+
+func ColumnAttrs(attrs map[string]interface{}) ColumnOption {
+	return func(opts *ColumnOptions) {
+		opts.Attrs = attrs
+	}
+}
 
 // ColumnHidden sets the visibility
 func ColumnHidden(v bool) ColumnOption {
@@ -153,6 +167,10 @@ func newColumnSerie(ctyp ColumnType, options ColumnOptions) (serie.Serie, error)
 type Column interface {
 	Name() string
 	Type() ColumnType
+	Label() string
+	Attrs() map[string]interface{}
+	SetLabel(label string) Column
+	SetAttrs(attrs map[string]interface{}) Column
 	UnderlyingType() reflect.Type
 	IsVisible() bool
 	IsComputed() bool
@@ -163,6 +181,8 @@ type column struct {
 	name     string
 	typ      ColumnType
 	hidden   bool
+	label    string
+	attrs    map[string]interface{}
 	formulae string
 	expr     expr.Node
 	serie    serie.Serie
@@ -170,6 +190,30 @@ type column struct {
 
 func (c *column) Name() string {
 	return c.name
+}
+
+func (c *column) Label() string {
+	if c.label == "" {
+		return c.name
+	}
+	return c.label
+}
+
+func (c *column) Attrs() map[string]interface{} {
+	if c.attrs == nil {
+		return map[string]interface{}{}
+	}
+	return c.attrs
+}
+
+func (c *column) SetLabel(label string) Column {
+	c.label = label
+	return c
+}
+
+func (c *column) SetAttrs(attrs map[string]interface{}) Column {
+	c.attrs = attrs
+	return c
 }
 
 func (c *column) Type() ColumnType {
@@ -192,6 +236,8 @@ func (c *column) emptyCopy() *column {
 	cpy := &column{
 		name:     c.name,
 		typ:      c.typ,
+		label:    c.label,
+		attrs:    c.attrs,
 		hidden:   c.hidden,
 		formulae: c.formulae,
 		serie:    c.serie.EmptyCopy(),
@@ -208,6 +254,8 @@ func (c *column) copy() *column {
 	cpy := &column{
 		name:     c.name,
 		typ:      c.typ,
+		label:    c.label,
+		attrs:    c.attrs,
 		hidden:   c.hidden,
 		formulae: c.formulae,
 		serie:    c.serie.Copy(),

@@ -73,6 +73,8 @@ func (t *DataTable) AddColumn(name string, ctyp ColumnType, opt ...ColumnOption)
 	return t.addColumn(&column{
 		name:     strings.TrimSpace(name),
 		typ:      ctyp,
+		label:    options.Label,
+		attrs:    options.Attrs,
 		serie:    sr,
 		hidden:   options.Hidden,
 		formulae: strings.TrimSpace(options.Expr),
