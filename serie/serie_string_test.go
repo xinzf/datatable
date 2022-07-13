@@ -3,7 +3,7 @@ package serie_test
 import (
 	"testing"
 
-	"github.com/datasweet/datatable/serie"
+	"github.com/xinzf/datatable/serie"
 )
 
 func TestString(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/datasweet/datatable/serie"
+	"github.com/xinzf/datatable/serie"
 )
 
 func TestSortInt(t *testing.T) {

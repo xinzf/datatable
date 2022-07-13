@@ -3,8 +3,8 @@ package datatable_test
 import (
 	"testing"
 
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 // checkTable to check if a table contains cells

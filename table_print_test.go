@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/datasweet/datatable"
+	"github.com/xinzf/datatable"
 )
 
 func TestPrint(t *testing.T) {

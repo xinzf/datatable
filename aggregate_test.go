@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 func TestAggregate(t *testing.T) {

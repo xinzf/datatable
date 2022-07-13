@@ -3,7 +3,7 @@ package datatable_test
 import (
 	"testing"
 
-	"github.com/datasweet/datatable"
+	"github.com/xinzf/datatable"
 )
 
 func TestSwapRow(t *testing.T) {

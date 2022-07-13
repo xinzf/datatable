@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/datasweet/datatable/serie"
 	"github.com/datasweet/expr"
 	"github.com/pkg/errors"
+	"github.com/xinzf/datatable/serie"
 )
 
 // ColumnType defines the valid column type in datatable

@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/datasweet/cast"
-	"github.com/datasweet/datatable"
 	"github.com/pkg/errors"
+	"github.com/xinzf/datatable"
 )
 
 // Import a csv

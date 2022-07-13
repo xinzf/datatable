@@ -1,7 +1,7 @@
 
 # datatable
-[![Go Report Card](https://goreportcard.com/badge/github.com/datasweet/datatable)](https://goreportcard.com/report/github.com/datasweet/datatable) [![GoDoc](https://godoc.org/github.com/datasweet/datatable?status.png)](https://godoc.org/github.com/datasweet/datatable) [![GitHub stars](https://img.shields.io/github/stars/datasweet/datatable.svg)](https://github.com/datasweet/datatable/stargazers)
-[![GitHub license](https://img.shields.io/github/license/datasweet/datatable.svg)](https://github.com/datasweet/datatable/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xinzf/datatable)](https://goreportcard.com/report/github.com/xinzf/datatable) [![GoDoc](https://godoc.org/github.com/xinzf/datatable?status.png)](https://godoc.org/github.com/xinzf/datatable) [![GitHub stars](https://img.shields.io/github/stars/datasweet/datatable.svg)](https://github.com/xinzf/datatable/stargazers)
+[![GitHub license](https://img.shields.io/github/license/datasweet/datatable.svg)](https://github.com/xinzf/datatable/blob/master/LICENSE)
 
 [![datasweet-logo](https://www.datasweet.fr/wp-content/uploads/2019/02/datasweet-black.png)](http://www.datasweet.fr)
 
@@ -11,7 +11,7 @@ Although it's production ready, be aware that we're still working on API improve
 
 ## Installation
 ```
-go get github.com/datasweet/datatable
+go get github.com/xinzf/datatable
 ```
 
 ## Features
@@ -32,7 +32,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/datasweet/datatable"
+	"github.com/xinzf/datatable"
 )
 
 func main() {
@@ -67,8 +67,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/datasweet/datatable"
-	"github.com/datasweet/datatable/import/csv"
+	"github.com/xinzf/datatable"
+	"github.com/xinzf/datatable/import/csv"
 )
 
 func main() {
@@ -192,7 +192,7 @@ func compareNullInt(a, b NullInt) int {
 We are Datasweet, a french startup providing full service (big) data solutions.
 
 ## Questions ? problems ? suggestions ?
-If you find a bug or want to request a feature, please create a [GitHub Issue](https://github.com/datasweet/datatable/issues/new).
+If you find a bug or want to request a feature, please create a [GitHub Issue](https://github.com/xinzf/datatable/issues/new).
 
 ## Contributors
 <table>

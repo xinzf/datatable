@@ -1,6 +1,6 @@
 package csv
 
-import "github.com/datasweet/datatable"
+import "github.com/xinzf/datatable"
 
 // Options are options to import a csv
 type Options struct {

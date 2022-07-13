@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 func sampleForExport(t *testing.T) *datatable.DataTable {

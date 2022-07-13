@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 // Sample from https://sql.sh/cours/union

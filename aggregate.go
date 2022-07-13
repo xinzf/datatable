@@ -5,8 +5,8 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/cespare/xxhash"
-	"github.com/datasweet/datatable/serie"
 	"github.com/pkg/errors"
+	"github.com/xinzf/datatable/serie"
 )
 
 // GroupBy defines the group by  configuration

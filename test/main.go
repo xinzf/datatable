@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/datasweet/datatable"
-	"github.com/datasweet/datatable/import/csv"
+	"github.com/xinzf/datatable"
+	"github.com/xinzf/datatable/import/csv"
 )
 
 func main() {

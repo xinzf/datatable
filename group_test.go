@@ -1,8 +1,8 @@
 package datatable_test
 
 import (
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 import "testing"

@@ -3,7 +3,7 @@ package datatable
 import (
 	"sort"
 
-	"github.com/datasweet/datatable/serie"
+	"github.com/xinzf/datatable/serie"
 )
 
 // SortBy defines a sort to be applied

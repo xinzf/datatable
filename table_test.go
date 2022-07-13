@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 func TestNewTable(t *testing.T) {

@@ -1,4 +1,4 @@
-module github.com/datasweet/datatable
+module github.com/xinzf/datatable
 
 go 1.18
 

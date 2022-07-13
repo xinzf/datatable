@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datasweet/datatable"
+	"github.com/xinzf/datatable"
 
-	"github.com/datasweet/datatable/import/csv"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable/import/csv"
 )
 
 func TestImport(t *testing.T) {

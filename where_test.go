@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/datasweet/cast"
-	"github.com/datasweet/datatable"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable"
 )
 
 func TestWhere(t *testing.T) {

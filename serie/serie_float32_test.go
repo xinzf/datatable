@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datasweet/datatable/serie"
+	"github.com/xinzf/datatable/serie"
 )
 
 func TestSerieFloat32(t *testing.T) {

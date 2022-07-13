@@ -6,8 +6,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/datasweet/datatable/serie"
 	"github.com/stretchr/testify/assert"
+	"github.com/xinzf/datatable/serie"
 	"gonum.org/v1/gonum/stat"
 )
 

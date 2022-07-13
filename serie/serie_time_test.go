@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datasweet/datatable/serie"
+	"github.com/xinzf/datatable/serie"
 )
 
 func TestSerieTime(t *testing.T) {
