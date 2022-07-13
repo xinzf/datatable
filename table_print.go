@@ -114,7 +114,7 @@ func (this *DataTable) Preview(opt ...PrintOption) {
 			if options.ColumnType {
 				h = append(h, fmt.Sprintf("%s", col.serie.Type().Name()))
 			}
-			headers = append(headers, strings.Join(h, "-"))
+			headers = append(headers, strings.Join(h, " | "))
 		}
 	}
 
