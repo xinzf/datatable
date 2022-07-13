@@ -135,3 +135,15 @@ func (s *serie) Variance(opt ...StatOption) float64 {
 	}
 	return stat.Variance(src, nil)
 }
+
+func (s *serie) GroupConcat(opt ...StatOption) []interface{} {
+	return []interface{}{s.All()}
+}
+
+func (s *serie) GroupAny(opt ...StatOption) interface{} {
+	vals := s.All()
+	if vals != nil && len(vals) > 0 {
+		return vals[0]
+	}
+	return nil
+}

@@ -33,6 +33,8 @@ const (
 	Stddev
 	Sum
 	Variance
+	GroupConcat
+	GroupAny
 )
 
 func (a AggregationType) String() string {
@@ -57,6 +59,10 @@ func (a AggregationType) String() string {
 		return "sum"
 	case Variance:
 		return "variance"
+	case GroupConcat:
+		return "group_concat"
+	case GroupAny:
+		return "group_any"
 	default:
 		panic("unkwown aggregation type")
 	}
@@ -153,7 +159,7 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 			return nil, errors.Wrap(err, ErrColumnNotFound.Error())
 		}
 		switch agg.Type {
-		case Avg, Count, CountDistinct, Cusum, Max, Min, Median, Stddev, Sum, Variance:
+		case Avg, Count, CountDistinct, Cusum, Max, Min, Median, Stddev, Sum, Variance, GroupConcat, GroupAny:
 			series[agg.Field] = col.(*column).serie
 		default:
 			return nil, ErrUnknownAgg
@@ -187,13 +193,19 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 			//name = fmt.Sprintf("%s %s", agg.Type, agg.Field)
 			name = fmt.Sprintf("%s_%s", agg.Type, agg.Field)
 		}
+
+		col := g.dt.Column(agg.Field).Clone()
+
 		typ := Float64
 		switch agg.Type {
 		case Count, CountDistinct:
 			typ = Int64
+		case GroupConcat:
+			typ = Raw
+		case GroupAny:
+			typ = col.Type()
 		default:
 		}
-		col := g.dt.Column(agg.Field).Clone()
 		if err := out.AddColumn(name, typ, func(opts *ColumnOptions) {
 			opts.Label = fmt.Sprintf("%s_%s", agg.Type, col.Label())
 		}); err != nil {
@@ -239,6 +251,10 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 				values = append(values, serie.Sum())
 			case Variance:
 				values = append(values, serie.Variance())
+			case GroupConcat:
+				values = append(values, serie.GroupConcat())
+			case GroupAny:
+				values = append(values, serie.GroupAny())
 			}
 		}
 		out.AppendRow(values...)

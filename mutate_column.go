@@ -57,6 +57,81 @@ func (t *DataTable) addColumn(col *column) error {
 	return nil
 }
 
+func (t *DataTable) unshiftColumn(col *column) error {
+	if col == nil {
+		return ErrNilColumn
+	}
+
+	// Check name
+	if len(col.name) == 0 {
+		return ErrNilColumnName
+	}
+	if c := t.Column(col.name); c != nil {
+		err := errors.Errorf("column '%s' already exists", col.name)
+		return errors.Wrap(err, ErrColumnAlreadyExists.Error())
+	}
+
+	// Check typ
+	if len(col.typ) == 0 {
+		return ErrNilColumnType
+	}
+
+	// Check formula
+	if len(col.formulae) > 0 {
+		parsed, err := expr.Parse(col.formulae)
+		if err != nil {
+			return errors.Wrapf(err, ErrFormulaeSyntax.Error())
+		}
+		col.expr = parsed
+		t.hasExpr = true
+	}
+
+	// Check serie
+	if col.serie == nil {
+		return ErrNilSerie
+	}
+	ln := col.serie.Len()
+
+	if ln < t.nrows {
+		col.serie.Grow(t.nrows - ln)
+	} else if ln > t.nrows {
+		size := ln - t.nrows
+		for _, col := range t.cols {
+			col.serie.Grow(size)
+		}
+		t.nrows = ln
+	}
+
+	t.cols = append([]*column{col}, t.cols...)
+	//t.cols = append(t.cols, col)
+	t.dirty = true
+	return nil
+}
+
+// UnshiftColumn to datatable with a serie of T
+func (t *DataTable) UnshiftColumn(name string, ctyp ColumnType, opt ...ColumnOption) error {
+	var options ColumnOptions
+	for _, o := range opt {
+		o(&options)
+	}
+
+	// create serie based on ctyp
+	sr, err := newColumnSerie(ctyp, options)
+	if err != nil {
+		return errors.Wrap(err, ErrCreateSerie.Error())
+	}
+
+	return t.unshiftColumn(&column{
+		name:     strings.TrimSpace(name),
+		typ:      ctyp,
+		label:    options.Label,
+		attrs:    options.Attrs,
+		serie:    sr,
+		hidden:   options.Hidden,
+		formulae: strings.TrimSpace(options.Expr),
+	})
+}
+
 // AddColumn to datatable with a serie of T
 func (t *DataTable) AddColumn(name string, ctyp ColumnType, opt ...ColumnOption) error {
 	var options ColumnOptions

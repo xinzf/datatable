@@ -60,6 +60,8 @@ type Serie interface {
 	Stddev(opt ...StatOption) float64
 	Sum(opt ...StatOption) float64
 	Variance(opt ...StatOption) float64
+	GroupConcat(opt ...StatOption) []interface{}
+	GroupAny(opt ...StatOption) interface{}
 }
 
 // Interfacer to convert a value of serie to interface{}
