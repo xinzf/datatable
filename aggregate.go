@@ -165,13 +165,13 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 	// create columns
 	for _, by := range g.by {
 		typ := by.Type
+		col := g.dt.Column(by.Name).Clone()
 		if len(typ) == 0 {
-			typ = Raw
+			//typ = Raw
+			typ = col.Type()
 		}
 
-		col := g.dt.Column(by.Name).Clone()
-
-		if err := out.AddColumn(col.Name(), col.Type(), func(opts *ColumnOptions) {
+		if err := out.AddColumn(col.Name(), typ, func(opts *ColumnOptions) {
 			opts.Label = col.Label()
 		}); err != nil {
 			//if err := out.addColumn(col.(*column)); err != nil {
@@ -194,11 +194,8 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 		default:
 		}
 		col := g.dt.Column(agg.Field).Clone()
-		col.(*column).name = name
-		col.(*column).label = fmt.Sprintf("%s_%s", agg.Type, col.Label())
-		col.(*column).typ = typ
-		if err := out.AddColumn(col.Name(), col.Type(), func(opts *ColumnOptions) {
-			opts.Label = col.Label()
+		if err := out.AddColumn(name, typ, func(opts *ColumnOptions) {
+			opts.Label = fmt.Sprintf("%s_%s", agg.Type, col.Label())
 		}); err != nil {
 			//}
 			//if err := out.addColumn(col.(*column)); err != nil {
