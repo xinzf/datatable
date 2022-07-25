@@ -37,6 +37,10 @@ const (
 	GroupAny
 )
 
+func (a AggregationType) GenerateNewName(originName string) string {
+	return fmt.Sprintf("%s_%s", a.String(), originName)
+}
+
 func (a AggregationType) String() string {
 	switch a {
 	case Avg:
@@ -191,7 +195,8 @@ func (g *Groups) Aggregate(aggs ...AggregateBy) (*DataTable, error) {
 		name := agg.As
 		if len(name) == 0 {
 			//name = fmt.Sprintf("%s %s", agg.Type, agg.Field)
-			name = fmt.Sprintf("%s_%s", agg.Type, agg.Field)
+			//name = fmt.Sprintf("%s_%s", agg.Type, agg.Field)
+			name = agg.Type.GenerateNewName(agg.Field)
 		}
 
 		col := g.dt.Column(agg.Field).Clone()

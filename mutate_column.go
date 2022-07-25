@@ -57,6 +57,30 @@ func (t *DataTable) addColumn(col *column) error {
 	return nil
 }
 
+func (t *DataTable) removeColumn(col *column) {
+	if col == nil {
+		return
+	}
+
+	cols := make([]*column, 0)
+	for _, c := range t.cols {
+		if c.name != col.Name() {
+			cols = append(cols, c)
+		}
+	}
+	t.cols = cols
+}
+
+func (t *DataTable) RemoveColumn(name string) {
+	cols := make([]*column, 0)
+	for _, c := range t.cols {
+		if c.name != name {
+			cols = append(cols, c)
+		}
+	}
+	t.cols = cols
+}
+
 func (t *DataTable) unshiftColumn(col *column) error {
 	if col == nil {
 		return ErrNilColumn
