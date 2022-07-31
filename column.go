@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/datasweet/expr"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
 	"github.com/xinzf/datatable/serie"
 )
@@ -25,10 +26,13 @@ const (
 	// Uint16    ColumnType = "uint16"
 	// Uint32    ColumnType = "uint32"
 	// Uint64    ColumnType = "uint64"
-	Float32 ColumnType = "float32"
-	Float64 ColumnType = "float64"
-	Time    ColumnType = "time"
-	Raw     ColumnType = "raw"
+	Float32     ColumnType = "float32"
+	Float64     ColumnType = "float64"
+	Time        ColumnType = "time"
+	Raw         ColumnType = "raw"
+	Array       ColumnType = "array"
+	Object      ColumnType = "object"
+	ArrayObject ColumnType = "arrayObject"
 )
 
 // ColumnOptions describes options to be apply on a column
@@ -95,36 +99,52 @@ var ctypes map[ColumnType]ColumnSerier
 
 func init() {
 	ctypes = make(map[ColumnType]ColumnSerier)
-	RegisterColumnType(Bool, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Bool, func(opts ColumnOptions) serie.Serie {
 		return serie.BoolN(opts.Values...)
 	})
-	RegisterColumnType(String, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(String, func(opts ColumnOptions) serie.Serie {
 		return serie.StringN(opts.Values...)
 	})
-	RegisterColumnType(Int, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Int, func(opts ColumnOptions) serie.Serie {
 		return serie.IntN(opts.Values...)
 	})
-	RegisterColumnType(Int32, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Int32, func(opts ColumnOptions) serie.Serie {
 		return serie.Int32N(opts.Values...)
 	})
-	RegisterColumnType(Int64, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Int64, func(opts ColumnOptions) serie.Serie {
 		return serie.Int64N(opts.Values...)
 	})
-	RegisterColumnType(Float32, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Float32, func(opts ColumnOptions) serie.Serie {
 		return serie.Float32N(opts.Values...)
 	})
-	RegisterColumnType(Float64, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Float64, func(opts ColumnOptions) serie.Serie {
 		return serie.Float64N(opts.Values...)
 	})
-	RegisterColumnType(Time, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Time, func(opts ColumnOptions) serie.Serie {
 		sr := serie.TimeN(opts.TimeFormats...)
 		if len(opts.Values) > 0 {
 			sr.Append(opts.Values...)
 		}
 		return sr
 	})
-	RegisterColumnType(Raw, func(opts ColumnOptions) serie.Serie {
+	_ = RegisterColumnType(Raw, func(opts ColumnOptions) serie.Serie {
 		return serie.Raw(opts.Values...)
+	})
+	_ = RegisterColumnType(Object, func(options ColumnOptions) serie.Serie {
+		return serie.Object(options.Values...)
+	})
+	_ = RegisterColumnType(Array, func(options ColumnOptions) serie.Serie {
+		items := make([]*[]interface{}, 0)
+		for _, value := range options.Values {
+			arr := make([]interface{}, 0)
+			bytes, err := jsoniter.Marshal(value)
+			if err == nil {
+				_ = jsoniter.Unmarshal(bytes, &arr)
+			}
+
+			items = append(items, &arr)
+		}
+		return serie.Array(items)
 	})
 }
 
