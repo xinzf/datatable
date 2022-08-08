@@ -118,7 +118,11 @@ func (this *DataTable) Preview(opt ...PrintOption) {
 		}
 	}
 
-	tb, _ := gotable.Create(headers...)
+	tb, err := gotable.Create(headers...)
+	if tb == nil {
+		fmt.Println("Table Err: ", err.Error())
+		return
+	}
 
 	for _, header := range headers {
 		tb.Align(header, cell.AlignCenter)
