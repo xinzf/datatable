@@ -1,8 +1,11 @@
 package datatable
 
+import "time"
+
 // ExportOptions to add options for exporting (like showing hidden columns)
 type ExportOptions struct {
 	WithHiddenCols bool
+	DefaultValue   map[ColumnType]any
 }
 
 type ExportOption func(*ExportOptions)
@@ -14,9 +17,29 @@ func ExportHidden(v bool) ExportOption {
 	}
 }
 
+func DefaultValue(tpe ColumnType, val any) ExportOption {
+	return func(options *ExportOptions) {
+		options.DefaultValue[tpe] = val
+	}
+}
+
 // newExportOptions to build the ExportOptions in order to acces the parameters
 func newExportOptions(opt ...ExportOption) ExportOptions {
 	var opts ExportOptions
+	opts.DefaultValue = map[ColumnType]any{
+		Bool:        nil,
+		String:      "",
+		Int:         nil,
+		Int32:       nil,
+		Int64:       nil,
+		Float32:     0.0,
+		Float64:     0.0,
+		Time:        time.Time{},
+		Raw:         nil,
+		Array:       []interface{}{},
+		Object:      map[string]any{},
+		ArrayObject: []interface{}{},
+	}
 	for _, o := range opt {
 		o(&opts)
 	}
@@ -25,6 +48,34 @@ func newExportOptions(opt ...ExportOption) ExportOptions {
 }
 
 // ToMap to export the datatable to a json-like struct
+//func (t *DataTable) ToMap(opt ...ExportOption) []map[string]interface{} {
+//	if t == nil {
+//		return nil
+//	}
+//
+//	opts := newExportOptions(opt...)
+//	if err := t.evaluateExpressions(); err != nil {
+//		panic(err)
+//	}
+//
+//	// visible columns
+//	cols := make(map[string]int)
+//	for i, col := range t.cols {
+//		if opts.WithHiddenCols || col.IsVisible() {
+//			cols[col.Name()] = i
+//		}
+//	}
+//
+//	rows := make([]map[string]interface{}, 0, t.nrows)
+//	for i := 0; i < t.nrows; i++ {
+//		r := make(map[string]interface{}, len(cols))
+//		for name, pos := range cols {
+//			r[name] = t.cols[pos].serie.Get(i)
+//		}
+//		rows = append(rows, r)
+//	}
+//	return rows
+//}
 func (t *DataTable) ToMap(opt ...ExportOption) []map[string]interface{} {
 	if t == nil {
 		return nil
@@ -35,11 +86,23 @@ func (t *DataTable) ToMap(opt ...ExportOption) []map[string]interface{} {
 		panic(err)
 	}
 
+	type colsDesc struct {
+		pos             int
+		defaultValue    any
+		hasDefaultValue bool
+	}
 	// visible columns
-	cols := make(map[string]int)
+	//cols := make(map[string]int)
+	cols := make(map[string]colsDesc)
 	for i, col := range t.cols {
 		if opts.WithHiddenCols || col.IsVisible() {
-			cols[col.Name()] = i
+			defaultValue, hasDefaultValue := opts.DefaultValue[col.typ]
+			cols[col.name] = colsDesc{
+				pos:             i,
+				defaultValue:    defaultValue,
+				hasDefaultValue: hasDefaultValue,
+			}
+			//cols[col.Name()] = i
 		}
 	}
 
@@ -47,7 +110,12 @@ func (t *DataTable) ToMap(opt ...ExportOption) []map[string]interface{} {
 	for i := 0; i < t.nrows; i++ {
 		r := make(map[string]interface{}, len(cols))
 		for name, pos := range cols {
-			r[name] = t.cols[pos].serie.Get(i)
+			val := t.cols[pos.pos].serie.Get(i)
+			if val == nil && pos.hasDefaultValue {
+				val = pos.defaultValue
+			}
+			r[name] = val
+			//r[name] = t.cols[pos].serie.Get(i)
 		}
 		rows = append(rows, r)
 	}

@@ -136,8 +136,11 @@ func (s *serie) Variance(opt ...StatOption) float64 {
 	return stat.Variance(src, nil)
 }
 
-func (s *serie) GroupConcat(opt ...StatOption) []interface{} {
-	return []interface{}{s.All()}
+func (s *serie) GroupConcat(opt ...StatOption) interface{} {
+	type arrStruct []interface{}
+	var arr = &arrStruct{}
+	*arr = append(*arr, s.All()...)
+	return arr
 }
 
 func (s *serie) GroupAny(opt ...StatOption) interface{} {
