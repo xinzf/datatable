@@ -195,6 +195,7 @@ type Column interface {
 	UnderlyingType() reflect.Type
 	IsVisible() bool
 	IsComputed() bool
+	Serie() serie.Serie
 	//Clone(includeValues bool) Column
 }
 
@@ -207,6 +208,10 @@ type column struct {
 	formulae string
 	expr     expr.Node
 	serie    serie.Serie
+}
+
+func (c *column) Serie() serie.Serie {
+	return c.serie
 }
 
 func (c *column) Name() string {
@@ -241,7 +246,7 @@ func (c *column) Clone() Column {
 		attrs:    c.attrs,
 		formulae: c.formulae,
 		expr:     c.expr,
-		serie:    c.serie,
+		serie:    c.serie.Copy(),
 	}
 }
 
